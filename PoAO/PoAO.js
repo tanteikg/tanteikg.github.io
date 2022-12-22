@@ -1307,6 +1307,12 @@ var asm = createWasm();
 var ___wasm_call_ctors = Module["___wasm_call_ctors"] = createExportWrapper("__wasm_call_ctors");
 
 /** @type {function(...*):?} */
+var _generate = Module["_generate"] = createExportWrapper("generate");
+
+/** @type {function(...*):?} */
+var _verify = Module["_verify"] = createExportWrapper("verify");
+
+/** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
 
 /** @type {function(...*):?} */
@@ -1346,7 +1352,7 @@ var _emscripten_stack_get_current = Module["_emscripten_stack_get_current"] = fu
   return (_emscripten_stack_get_current = Module["_emscripten_stack_get_current"] = Module["asm"]["emscripten_stack_get_current"]).apply(null, arguments);
 };
 
-var _ret = Module['_ret'] = 65536;
+
 
 
 
