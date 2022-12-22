@@ -10,22 +10,20 @@
         function generate_proof() {
             var a = document.getElementById("cli_secret").value;
             var b = document.getElementById("cli_message").value;
-
-            ret = Module._generate(a, b);
-
-            var rc = document.getElementById("ret");
-            rc.innerText = ret
-            Module._clearbuf(ret);
+            result = Module.ccall('generate','string',['string', 'string'],[a,b]);
+	    var rc = document.getElementById("ret") 
+	    rc.innerText = result
+            Module._clearbuf(result)
         }
         function verify_proof() {
-            var c = document.getElementById("srv_message").value;
-            var d = document.getElementById("srv_proof").value;
+            var c = document.getElementById("svr_message").value;
+            var d = document.getElementById("svr_proof").value;
 
-            ret = Module._verify(c, d);
+            result = Module.ccall('verify','string',['string','string'],[c, d]);
 
-            var rs = document.getElementById("ret");
-            rs.innerText = ret
-            Module._clearbuf(ret);
+            var rs = document.getElementById("res");
+            rs.innerText = result
+            Module._clearbuf(result)
         }
     </script>
   </head>
