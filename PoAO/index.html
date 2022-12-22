@@ -15,15 +15,17 @@
 
             var rc = document.getElementById("ret");
             rc.innerText = ret
+            Module._clearbuf(ret);
         }
         function verify_proof() {
             var c = document.getElementById("srv_message").value;
             var d = document.getElementById("srv_proof").value;
 
-            res = Module._verify(c, d);
+            ret = Module._verify(c, d);
 
-            var rs = document.getElementById("res");
-            rs.innerText = res
+            var rs = document.getElementById("ret");
+            rs.innerText = ret
+            Module._clearbuf(ret);
         }
     </script>
   </head>

@@ -1294,13 +1294,26 @@ var ASM_CONSTS = {
         err(text);
       }
     }
+
+  function getHeapMax() {
+      return HEAPU8.length;
+    }
+  
+  function abortOnCannotGrowMemory(requestedSize) {
+      abort('Cannot enlarge memory arrays to size ' + requestedSize + ' bytes (OOM). Either (1) compile with -sINITIAL_MEMORY=X with X higher than the current value ' + HEAP8.length + ', (2) compile with -sALLOW_MEMORY_GROWTH which allows increasing the size at runtime, or (3) if you want malloc to return NULL (0) instead of this abort, compile with -sABORTING_MALLOC=0');
+    }
+  function _emscripten_resize_heap(requestedSize) {
+      var oldSize = HEAPU8.length;
+      requestedSize = requestedSize >>> 0;
+      abortOnCannotGrowMemory(requestedSize);
+    }
 var ASSERTIONS = true;
 
 function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var asmLibraryArg = {
-  
+  "emscripten_resize_heap": _emscripten_resize_heap
 };
 var asm = createWasm();
 /** @type {function(...*):?} */
@@ -1311,6 +1324,9 @@ var _generate = Module["_generate"] = createExportWrapper("generate");
 
 /** @type {function(...*):?} */
 var _verify = Module["_verify"] = createExportWrapper("verify");
+
+/** @type {function(...*):?} */
+var _clearbuf = Module["_clearbuf"] = createExportWrapper("clearbuf");
 
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
@@ -1609,8 +1625,6 @@ var missingLibrarySymbols = [
   'zeroMemory',
   'stringToNewUTF8',
   'exitJS',
-  'getHeapMax',
-  'abortOnCannotGrowMemory',
   'emscripten_realloc_buffer',
   'setErrNo',
   'inetPton4',
