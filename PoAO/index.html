@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Proof of Address Ownership</title>
+    <script src="PoAO.js"></script>
+
+    <script>
+        function generate_proof() {
+            var a = document.getElementById("cli_secret").value;
+            var b = document.getElementById("cli_message").value;
+
+            ret = Module._generate(a, b);
+
+            var rc = document.getElementById("ret");
+            rc.innerText = ret
+        }
+        function verify_proof() {
+            var c = document.getElementById("srv_message").value;
+            var d = document.getElementById("srv_proof").value;
+
+            res = Module._verify(c, d);
+
+            var rs = document.getElementById("res");
+            rs.innerText = res
+        }
+    </script>
+  </head>
+  
+  <body>
+    <h2>Welcome to Proof of Address Ownership page!</h2>
+    <p>This is a demo page for the Proof Generation (at client) and Proof Verification (on server) to take place.</p>
+    <h3>Client (Please do this offline if you are working on production secrets)</h3>
+    <div style="display: inline-block;">
+<p>Enter secret:&nbsp; <input id="cli_secret" type="password"/> </p>
+<p>Enter Message:&nbsp; <input id="cli_message" /> </p>
+<button id="gen_button" onclick="generate_proof()">Generate</button>
+<p>Proof Generated:&nbsp; <label id="ret"></p>
+    </div>
+<hr />
+   <h3>Server&nbsp;</h3>
+    <div style="display: inline-block;">
+   <p>Enter Message:&nbsp; <input id="svr_message" /> </p>
+   <p>Enter Proof: &nbsp; <input id="svr_proof" /> </p>
+   <button id="ver_button" onclick="verify_proof()">Verify</button>
+   <p>Result:<label id="res"></p>
+    </div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Copyright pQCee 2022. All rights reserved.&nbsp;</p>
+  </body>
+</html>
