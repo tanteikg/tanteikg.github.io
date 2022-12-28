@@ -12,9 +12,11 @@
 		var a = document.getElementById("cli_message").value;
 		var b = document.getElementById("cli_secret").value;
 		result = Module.ccall('generate_poc','string',['string', 'string', 'string'],[a,b, "1E"]);
+		const obj = JSON.parse(result)
+		let wallet = obj.wallet
 		var blob = new Blob([result],{type:mime_type});
 		var dlink = document.createElement('a');
-		dlink.download = "proof.txt";
+		dlink.download = wallet + ".json";
 		dlink.href = window.URL.createObjectURL(blob);
 		dlink.onclick = function(e) {
 			var that = this;
@@ -26,19 +28,17 @@
 		dlink.remove();
 
 		var rc = document.getElementById("ret") 
-		rc.innerText = "Proof provided in proof.txt" 
+		rc.innerText = "Proof generated for " + wallet
 		Module._clearbuf(result)
         }
         function verify_proof(filehandle) {
-		var c = document.getElementById("svr_message").value;
-		var d = document.getElementById("svr_proof").value;
 		var prooffile = filehandle.files[0];
 		var fr = new FileReader();
 		fr.readAsText(prooffile);
 		fr.onload = function() 
 		{
 			Module['FS_createDataFile']('/', 'dummy.txt', fr.result, true, true, true);
-			var result = Module.ccall('verify_poc','string',['string','string', 'string'],[c, "dummy.txt", "1E"]);
+			var result = Module.ccall('verify_poc','string',['string'],["dummy.txt"]);
 			filehandle.value = '';
 			var rs = document.getElementById("res");
 			rs.innerText = result
@@ -62,7 +62,6 @@
 <hr />
    <h3>Server&nbsp;</h3>
     <div style="display: inline-block;">
-   <p>Enter Message:&nbsp; <input id="svr_message" /> </p>
    <p>Upload Proof: &nbsp; <input id="svr_proof" type="file" onChange={verify_proof(this)} /> </p>
    <p>Result:<label id="res"></p>
     </div>
