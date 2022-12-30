@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Decent Oracles</title>
     <script src="PoAO.js"></script>
-
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script>
         function generate_proof() {
 		mime_type= "text/plain";
@@ -37,11 +37,17 @@
 		fr.readAsText(prooffile);
 		fr.onload = function() 
 		{
-			Module['FS_createDataFile']('/', 'dummy.txt', fr.result, true, true, true);
-			var result = Module.ccall('verify_poc','string',['string'],["dummy.txt"]);
+			const obj = JSON.parse(fr.result)
+			let wa = obj.wallet
+			let walletname = wa+".txt"
+			Module['FS_createDataFile']('/', walletname, fr.result, true, true, true);
+			var result = Module.ccall('verify_poc','string',['string'],[walletname]);
 			filehandle.value = '';
+			 Module['FS_unlink'](walletname);
 			var rs = document.getElementById("res");
 			rs.innerText = result
+			document.getElementById("tw").innerHTML = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" data-size="large" data-via="tanteikg" data-text="I created my public key zero-knowledge proof for Dogecoin wallet '+wa+'. You can do it too.\n\n">Tweet</a>'
+			        twttr.widgets.load()
 			Module._clearbuf(result)
     		};
 
@@ -55,9 +61,9 @@
     <h3>Client (Please do this offline if you are working on production secrets)</h3>
     <div style="display: inline-block;">
 <p>Enter public key:&nbsp; <input id="cli_secret" type="password"/> </p>
-<p>Enter Message:&nbsp; <input id="cli_message" /> </p>
+<p>Enter user name (max 20 chars):&nbsp; <input id="cli_message" /> knows the public key to this address</p>
 <button id="gen_button" onclick="generate_proof()">Generate</button>
-<p>Proof Generated:&nbsp; <label id="ret"></p>
+<p>Result:&nbsp; <label id="ret"></p>
     </div>
 <hr />
    <h3>Server&nbsp;</h3>
@@ -65,9 +71,11 @@
    <p>Upload Proof: &nbsp; <input id="svr_proof" type="file" onChange={verify_proof(this)} /> </p>
    <p>Result:<label id="res"></p>
     </div>
+    <div id=tw>
+   </div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>Copyright pQCee 2022. All rights reserved.&nbsp;</p>
+<p>Copyright pQCee 2022-23. All rights reserved.&nbsp;</p>
   </body>
 </html>
