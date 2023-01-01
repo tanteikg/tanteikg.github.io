@@ -42,12 +42,18 @@
 			let walletname = wa+".txt"
 			Module['FS_createDataFile']('/', walletname, fr.result, true, true, true);
 			var result = Module.ccall('verify_poc','string',['string'],[walletname]);
-			filehandle.value = '';
+			const obj1 = JSON.parse(result)
+//			filehandle.value = '';
 			 Module['FS_unlink'](walletname);
 			var rs = document.getElementById("res");
-			rs.innerText = result
-			document.getElementById("tw").innerHTML = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" data-size="large" data-via="tanteikg" data-text="I created my public key zero-knowledge proof for Dogecoin wallet '+wa+'. You can do it too.\n\n">Tweet</a>'
+			rs.innerText = obj1.msg 
+			if (obj1.rc == 0)
+			{
+				document.getElementById("tw").innerHTML = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" data-size="large" data-via="tanteikg" data-text="I created my public key zero-knowledge proof for Dogecoin wallet '+wa+'. You can do it too.\n\n">Tweet</a>'
 			        twttr.widgets.load()
+			}
+			else
+				document.getElementById("tw").innerHTML = ""
 			Module._clearbuf(result)
     		};
 
@@ -60,7 +66,7 @@
     <p>This is a demo page for the Proof Generation (at client) and Proof Verification (on server) of Dogecoin wallet addresses to take place.</p>
     <h3>Client (Please do this offline if you are working on production secrets)</h3>
     <div style="display: inline-block;">
-<p>Enter public key:&nbsp; <input id="cli_secret" type="password"/> </p>
+<p>Enter public key (in Hex):&nbsp; <input id="cli_secret" type="password"/> </p>
 <p>Enter user name (max 20 chars):&nbsp; <input id="cli_message" /> knows the public key to this address</p>
 <button id="gen_button" onclick="generate_proof()">Generate</button>
 <p>Result:&nbsp; <label id="ret"></p>
@@ -75,6 +81,7 @@
    </div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+<hr />
 <p>&nbsp;</p>
 <p>Copyright pQCee 2022-23. All rights reserved.&nbsp;</p>
   </body>
