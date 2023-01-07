@@ -62,17 +62,23 @@
   </head>
   
   <body>
-    <h2>Welcome to Proof of Address Ownership page!</h2>
-    <p>This is a demo page for the Proof Generation (at client) and Proof Verification (on server) of Dogecoin wallet addresses to take place.</p>
-    <h3>Client (Please do this offline if you are working on production secrets)</h3>
+    <h2>Welcome to Proof of Address page!</h2>
+    <p>This is a demo page for the Proof Generation and Proof Verification of Dogecoin wallet addresses to take place.</p>
+    <ul>
+	    <li>This proof makes sense only if the wallet address has never been used to send out coins. </li>
+	    <li>To get the public key, issue the following command, replacing "D6....es" with your actual wallet address: <p style="font-family:'Courier New'"> dogecoin-cli validateaddress "D6......es" </p>  </li>
+	    <li>You should see your public key under "pubkey" which starts with "02" or "03" in the JSON output and is 64 hexadecimal characters long</li>
+    </ul>
+<hr />
+    <h3>Generate Proof (Please do this offline if you are working on production secrets)</h3>
     <div style="display: inline-block;">
-<p>Enter public key (in Hex):&nbsp; <input id="cli_secret" type="password"/> </p>
+<p>Enter public key (in Hex):&nbsp;<input id="cli_secret" type="password"/> </p>
 <p>Enter user name (max 20 chars):&nbsp; <input id="cli_message" /> knows the public key to this address</p>
 <button id="gen_button" onclick="generate_proof()">Generate</button>
 <p>Result:&nbsp; <label id="ret"></p>
     </div>
 <hr />
-   <h3>Server&nbsp;</h3>
+   <h3>Verify Proof&nbsp;</h3>
     <div style="display: inline-block;">
    <p>Upload Proof: &nbsp; <input id="svr_proof" type="file" onChange={verify_proof(this)} /> </p>
    <p>Result:<label id="res"></p>
