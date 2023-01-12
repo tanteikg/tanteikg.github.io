@@ -1,1 +1,78 @@
-Hello World
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CodeQL and Shor's Algorithm</title>
+    <style>
+        /* Add some styles to make the page look nicer */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .code {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>CodeQL and Shor's Algorithm</h1>
+        <p>
+            Shor's algorithm is a quantum algorithm for factoring integers that was proposed by mathematician Peter Shor in 1994. It represents a major breakthrough in the field of quantum computing and it could potentially be used to break many of the commonly used public-key encryption systems. 
+        </p>
+        <p>
+            To protect against Shor's algorithm, it is important to use quantum-safe algorithms or post-quantum cryptography algorithms. CodeQL can be used to detect the use of specific cryptographic libraries and protocols that are known to be vulnerable to Shor's algorithm, such as RSA and ECC.
+        </p>
+        <h2>CodeQL Examples</h2>
+        <p>Here is an example of a simple CodeQL query that looks for calls to the RSA encryption function in C++ code:</p>
+        <pre class="code">
+import cpp
+
+class RSAChecker extends CppChecker {
+  override void visitCallExpr(CallExpr expr) {
+    var target = expr.getTarget()
+    if (target.name == "RSA_public_encrypt" or
+        target.name == "RSA_private_decrypt" or
+        target.name == "RSA_private_encrypt" or
+        target.name == "RSA_public_decrypt") {
+        report("Call to RSA encryption function detected at " + expr.location.toString())
+    }
+  }
+}
+
+query {
+  for (var c : cpp.callgraph("main")) {
+    check(c, new RSAChecker())
+  }
+}
+        </pre>
+<p>
+    To run the script, you can use the <a href="https://codeql.github.io/">CodeQL Web UI</a>.
+</p>
+        <p>
+            As a next step to detect potential vulnerabilities, one could analyze the key lengths in use and if they are considered as quantum-safe, if not, then it could be vulnerable to Shor's Algorithm
+        </p>
+        <h2>Using GPT-3 for vulnerability detection</h2>
+        <p>
+            GPT-3 can be used to generate code in different languages and also identify the vulnerability on its own. With GPT-3's natural language processing capabilities, it can be used to understand the problem statement, to scan the codebase and generate a report of the results
+
+<footer>
+ Partially written by <p><a href="https://chat.openai.com/">ChatGPT</a></p>
+ &copy; Copyright 2023 pQCee.com 
+</footer>
