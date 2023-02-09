@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      H1,H3 {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      input[type='number']{
+	width: 50px;	       
+      } 
+      div {
+        width: 45%;
+	vertical-align: text-top;
+        margin: 10px auto;
+        display: inline-flex;
+        flex-direction: column;
+      } 
+      ul { display: inline;
+	      list-style-type: circle;
+	      margin:0;
+	      padding:0;
+      }
+
+      }
+    </style>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script>
+
+    const QCAddress = "0x7718760b559a073D14CF26aA0F823Da860fc14d3";
+    const QCABI = 
+[
+	{
+		"inputs": [],
+		"name": "collectSubscription",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "subscribeQScript",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newEval",
+				"type": "uint256"
+			}
+		],
+		"name": "updateEval",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newFee",
+				"type": "uint256"
+			}
+		],
+		"name": "updateFee",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "numQubits",
+				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "s",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "randomSeed",
+				"type": "uint256"
+			}
+		],
+		"name": "runQScript",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+    let QC;
+    let signer;
+    try{
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    provider.send("eth_requestAccounts", []).then(() => {
+      provider.listAccounts().then((accounts) => {
+        signer = provider.getSigner(accounts[0]);
+        QC = new ethers.Contract(
+          QCAddress,
+          QCABI,
+          signer
+        );
+      });
+    });
+    } catch (err) {
+	    alert(err + "\n\nIs Metamask available?");
+    }
+
+  
+    async function subscribe() 
+    {
+      var rc = document.getElementById("ret")
+      rc.innerText = "Topping up Subscription..";
+      try{
+	      const resp = await QC.subscribeQScript({ value: ethers.utils.parseEther("0.001") });
+      rc.innerText = "Top Up Subscription ok" ;
+     }
+	catch(err) {
+     		rc.innerText = err.message;
+	}
+    }
+
+    async function collectSub() 
+    {
+      var rc = document.getElementById("ret")
+      rc.innerText = "Calling Collect Subscription..";
+      try{
+      const resp = await QC.collectSubscription();
+      rc.innerText = "Collect Subscription ok" ;
+     }
+	catch(err) {
+     		rc.innerText = err.message;
+	}
+    }
+
+    async function updateEval() 
+    {
+      var rc = document.getElementById("ret")
+      var eval = document.getElementById("eval")
+      rc.innerText = "Calling Update Evaluation Status..";
+      try{
+      const resp = await QC.updateEval(eval.value);
+      rc.innerText = "Update Evaluation Status ok" ;
+     }
+	catch(err) {
+     		rc.innerText = err.message;
+	}
+    }
+
+    async function updateFee() 
+    {
+      var rc = document.getElementById("ret")
+      var fee = document.getElementById("fee")
+      rc.innerText = "Calling Update Fee..";
+      try{
+      const resp = await QC.updateFee(fee.value);
+      rc.innerText = "Update Fee ok" ;
+     }
+	catch(err) {
+     		rc.innerText = err.message;
+	}
+
+
+   } 
+
+    </script>
+    <title>Quantum Contracts v0.2 Administration</title>
+  </head>
+  <body>
+    <h1>On-chain Quantum Computing</h1>
+    <h3>Administrative functions</h3>
+  <div>
+    <H3> For Owner </H3>
+    <H5> Update Fee </H5>
+    <small>
+    <label>Enter Fee: <input type="number" id="fee" default=1000/> 
+	    <button onclick="updateFee()">Update Fee</button> </label>
+    </small>
+    <hr>
+    <H5> Update Evaluation Mode </H5>
+    <small>
+    <label>Enter mode (1=true, 0=false):<input type="number" id="eval" max=1, min=0/> 
+    <button onclick="updateEval()">Update Mode</button> </label>
+    </small>
+    <hr>
+    <H5> Collect Subscription 
+	    <button onclick="collectSub()">Go!</button> </H5>
+  </div>
+  <div>
+    <H3> For Subscriber </H3>
+    <H5> Top up Subscription 
+	    <button onclick="subscribe()">Add 0.001</button> </H5>
+    <p><p>
+    <H3> Status </h3>
+    <small>    <p>Result:&nbsp; <label id="ret"></p>
+    </small>
+    <div id=tw> </div>
+  </div>
+
+  </div>
+  <p>&nbsp;</p>
+  <small><small><small>
+			  <p>Copyright pQCee 2022-23. All rights reserved.&nbsp; For enquiries, please contact <a href="mailto:info@pqcee.com"> info@pqcee.com</p> </small></small></small>
+  </body>
+</html>
