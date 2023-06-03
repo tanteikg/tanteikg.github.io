@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="QuGIF.js"></script>
     <style>
       H1,H3 {
         text-align: center;
@@ -69,8 +70,38 @@
 ] 
 
 //    const QCAddress = "0x7718760b559a073D14CF26aA0F823Da860fc14d3";
-    const QCAddress = "0x3A2A12b422B653f9a228DfC4bCE1C27609EF36d8";
+//    const QCAddress = "0x3A2A12b422B653f9a228DfC4bCE1C27609EF36d8";
+	const QCAddress = "0xBF89F6943bB1E1089B03E144c2aA2B0091eABa8d";
     const QCABI = [
+	{
+                "inputs": [
+                        {
+                                "internalType": "uint8",
+                                "name": "numQubits",
+                                "type": "uint8"
+                        },
+                        {
+                                "internalType": "string",
+                                "name": "s",
+                                "type": "string"
+                        },
+                        {
+                                "internalType": "uint256",
+                                "name": "randomSeed",
+                                "type": "uint256"
+                        }
+                ],
+                "name": "nftQScript",
+                "outputs": [
+                        {
+                                "internalType": "uint[]",
+                                "name": "",
+                                "type": "uint[]"
+                        }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+        },	
 	{
 		"inputs": [
 			{
@@ -143,6 +174,50 @@
 
    } 
 
+async function generateNFT()
+{
+	var rc = document.getElementById("ret")
+	var Qnum = document.getElementById("numQubits")
+	var Qcir = document.getElementById("circuit")
+	rc.innerText = "Sending circuit to " + QCAddress;
+	try{
+		const resp = QC.nftQScript(Qnum.value,Qcir.value,Date.now());
+		const result = await resp;
+		strresult = String.fromCharCode.apply(String, result);;
+		rc.innerText = " ";
+		gifresult = Module.ccall('create_GIF','string',['number','string'],[Qnum,strresult]);
+		const byteCharacters = atob(gifresult);
+		const byteArrays = [];
+		let sliceSize = 512;
+		for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+			const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+			const byteNumbers = new Array(slice.length);
+			for (let i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			}
+
+			const byteArray = new Uint8Array(byteNumbers);
+			byteArrays.push(byteArray);
+		}
+		const gifBlob = new Blob(byteArrays, {type: 'image/gif'});
+
+		{
+			document.getElementById("tw").innerHTML = '<img id="image" width="200" height="200"/>';
+
+			document.querySelector("#image").src = URL.createObjectURL(gifBlob);
+
+			Module._clearbuf(gifresult);
+		}
+	}
+        catch(err) {
+		rc.innerText = err.message;
+		document.getElementById("tw").innerHTML = "";
+	}
+
+}
+
+
     function setChoice(selObj)
     {
       var value = selObj.value; 
@@ -181,7 +256,7 @@
       else if (value == "Shor21")
       {
         Qnum.value= 5;
-        Qcir.value = "HHHII,IICIN,ICIIN,IIINC,ICICN,IIIIX,CIINC,IIIIX,IIINC,CIICN,IIINC,IIHII,ICPII,CITII,IHIII,CPIII,HIIII."; 
+        Qcir.value = "HHHII,IICIN,ICIIN,IIINC,ICICN,IIIIX,CIINC,IIIIX,IIINC,CIICN,IIINC,IIHII,ICpII,CItII,IHIII,CpIII,HIIII."; 
       }
       else if (value == "Shor15")
       {
@@ -235,6 +310,7 @@
     <label for="run">Enter Circuit:</label> <br />
     <input type="text" id="circuit"  />
     <button onclick="runCircuit()">Run Circuit</button>
+    <button onclick="generateNFT()">Generate NFT</button>
     <p>
     <small><small>Remember to connect MetaMask to Mumbai testnet</small></small>
   </div>
