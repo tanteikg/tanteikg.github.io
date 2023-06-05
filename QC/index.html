@@ -71,7 +71,8 @@
 
 //    const QCAddress = "0x7718760b559a073D14CF26aA0F823Da860fc14d3";
 //    const QCAddress = "0x3A2A12b422B653f9a228DfC4bCE1C27609EF36d8";
-	const QCAddress = "0xBF89F6943bB1E1089B03E144c2aA2B0091eABa8d";
+//	const QCAddress = "0xBF89F6943bB1E1089B03E144c2aA2B0091eABa8d";
+	const QCAddress = "0xcC15b95aD695dB07f312376535DBEaFBD95B5Ae1";
     const QCABI = [
 	{
                 "inputs": [
@@ -151,28 +152,27 @@
     }
 
   
-    async function runCircuit() 
-    {
-      var rc = document.getElementById("ret")
-      var Qnum = document.getElementById("numQubits")
-      var Qcir = document.getElementById("circuit")
-      rc.innerText = "Sending circuit to " + QCAddress;
-      try{
-      const resp = QC.runQScript(Qnum.value,Qcir.value,Date.now());
-      const result = await resp;
-      rc.innerText = result + "   (Binary: " + BigInt(result).toString(2) + ")";
-	{
-           document.getElementById("tw").innerHTML = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" data-size="large" data-via="tanteikg" data-text="I used #QuantumContracts to run my '+Qnum.value +' Qubit quantum circuit on the Polygon chain. #pQCee #BeQuantumReady &#129504; \n\n@0xPolygon ">Tweet</a>'
-                                twttr.widgets.load()
-            }
-     }
+async function runCircuit() 
+{
+	var rc = document.getElementById("ret")
+	var Qnum = document.getElementById("numQubits")
+	var Qcir = document.getElementById("circuit")
+	rc.innerText = "Sending circuit to " + QCAddress;
+	try{
+		const resp = QC.runQScript(Qnum.value,Qcir.value,Date.now());
+		const result = await resp;
+		rc.innerText = result + "   (Binary: " + BigInt(result).toString(2) + ")";
+		{
+			document.getElementById("tw").innerHTML = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false" data-size="large" data-via="tanteikg" data-text="I used #QuantumContracts to run my '+Qnum.value +' Qubit quantum circuit on the Polygon chain. #pQCee #BeQuantumReady &#129504; \n\n@0xPolygon ">Tweet</a>'
+			twttr.widgets.load()
+		}
+	}
 	catch(err) {
      		rc.innerText = err.message;
 		document.getElementById("tw").innerHTML = "";
 	}
 
-
-   } 
+} 
 
 async function generateNFT()
 {
@@ -185,7 +185,7 @@ async function generateNFT()
 		const result = await resp;
 		strresult = String.fromCharCode.apply(String, result);;
 		rc.innerText = " ";
-		gifresult = Module.ccall('create_GIF','string',['number','string'],[Qnum,strresult]);
+		gifresult = Module.ccall('create_GIF','string',['number','string'],[Qnum.value,strresult]);
 		const byteCharacters = atob(gifresult);
 		const byteArrays = [];
 		let sliceSize = 512;
@@ -218,60 +218,59 @@ async function generateNFT()
 }
 
 
-    function setChoice(selObj)
-    {
-      var value = selObj.value; 
-      var Qnum = document.getElementById("numQubits")
-      var Qcir = document.getElementById("circuit")
-      if (value == "Custom")
-      {
-        Qnum.value= 2;
-        Qcir.value = "";
-      }
-      else if (value == "Bell")
-      {
-        Qnum.value= 2;
-        Qcir.value = "HI,CN.";
-      }
-      else if (value == "GHZ")
-      {
-        Qnum.value= 3;
-        Qcir.value = "HII,CNI,ICN.";
-      }
-      else if (value == "Simon")
-      {
-        Qnum.value= 4;
-        Qcir.value = "HHII,CINI,CIIN,ICNI,ICIN,IImm,HHII,mmII.";
-      }
-      else if (value == "Grover2")
-      {
-        Qnum.value= 3;
-        Qcir.value = "HHI,IIX,IIH,III,CCN,III,IIH,IIX,HHI,XXI,IHI,CNI,IHI,XXI,HHI."; 
-      }
-      else if (value == "Grover3")
-      {
-        Qnum.value= 4;
-        Qcir.value = "HHHI,IIIX,IIIH,IIII,CCCN,IIII,IIIH,IIIX,HHHI,XXXI,IIHI,CCNI,IIHI,XXXI,HHHI,IIIX,IIIH,IIII,CCCN,IIII,IIIH,IIIX,HHHI,XXXI,IIHI,CCNI,IIHI,XXXI,HHHI."; 
-      }
-      else if (value == "Shor21")
-      {
-        Qnum.value= 5;
-        Qcir.value = "HHHII,IICIN,ICIIN,IIINC,ICICN,IIIIX,CIINC,IIIIX,IIINC,CIICN,IIINC,IIHII,ICpII,CItII,IHIII,CpIII,HIIII."; 
-      }
-      else if (value == "Shor15")
-      {
-        Qnum.value= 7;
-        Qcir.value = "HHHIIII,IICINII,IICIINI,IIICINI,ICINICI,IIICINI,IIIINIC,ICIICIN,HIIIIII,CPIIIII,IHIIIII,CITIIII,ICPIIII,IIHIIII.";
-      }
-      else
-      {
-        Qnum.value= 2;
-        Qcir.value = "HH.";
-      }
-
-    }
+function setChoice(selObj)
+{
+	var value = selObj.value; 
+	var Qnum = document.getElementById("numQubits")
+	var Qcir = document.getElementById("circuit")
+	if (value == "Custom")
+	{
+		Qnum.value= 2;
+		Qcir.value = "";
+	}
+	else if (value == "Bell")
+	{
+		Qnum.value= 2;
+		Qcir.value = "HI,CN.";
+	}
+	else if (value == "GHZ")
+	{
+		Qnum.value= 3;
+		Qcir.value = "HII,CNI,ICN.";
+	}
+	else if (value == "Simon")
+	{
+		Qnum.value= 4;
+		Qcir.value = "HHII,CINI,CIIN,ICNI,ICIN,IImm,HHII,mmII.";
+	}
+	else if (value == "Grover2")
+	{
+		Qnum.value= 3;
+		Qcir.value = "HHI,IIX,IIH,III,CCN,III,IIH,IIX,HHI,XXI,IHI,CNI,IHI,XXI,HHI."; 
+	}
+	else if (value == "Grover3")
+	{
+		Qnum.value= 4;
+		Qcir.value = "HHHI,IIIX,IIIH,IIII,CCCN,IIII,IIIH,IIIX,HHHI,XXXI,IIHI,CCNI,IIHI,XXXI,HHHI,IIIX,IIIH,IIII,CCCN,IIII,IIIH,IIIX,HHHI,XXXI,IIHI,CCNI,IIHI,XXXI,HHHI."; 
+	}
+	else if (value == "Shor21")
+	{
+		Qnum.value= 5;
+		Qcir.value = "HHHII,IICIN,ICIIN,IIINC,ICICN,IIIIX,CIINC,IIIIX,IIINC,CIICN,IIINC,IIHII,ICpII,CItII,IHIII,CpIII,HIIII."; 
+	}
+	else if (value == "Shor15")
+	{
+		Qnum.value= 7;
+		Qcir.value = "HHHIIII,IICINII,IICIINI,IIICINI,ICINICI,IIICINI,IIIINIC,ICIICIN,HIIIIII,CPIIIII,IHIIIII,CITIIII,ICPIIII,IIHIIII.";
+	}
+	else
+	{
+		Qnum.value= 2;
+		Qcir.value = "HH.";
+	}
+}
     </script>
-    <title>Quantum Contracts v0.2a</title>
+    <title>Quantum Contracts v0.4</title>
   </head>
   <body>
     <h1>On-chain Quantum Computing</h1>
