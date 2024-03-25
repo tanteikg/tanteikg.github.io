@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+/*
+ *
+ * Author: pQCee 
+ * Description : QuICScript implementation in Office Add-ins for Excel 
+ *
+ * Copyright pQCee 2024. All rights reserved
+ *
+ * “Commons Clause” License Condition v1.0
+ *
+ * The Software is provided to you by the Licensor under the License, as defined below, subject to the following
+ * condition.
+ *
+ * Without limiting other conditions in the License, the grant of rights under the License will not include, and
+ * the License does not grant to you, the right to Sell the Software.
+ *
+ * For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License
+ * to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or
+ * consulting/ support services related to the Software), a product or service whose value derives, entirely or
+ * substantially, from the functionality of the Software. Any license notice or attribution required by the License
+ * must also include this Commons Clause License Condition notice.
+ *
+ * Software: QuICScript Office Add-in
+ *
+ * License: MIT, BSD-3-Clause
+ *
+ * Licensor: pQCee Pte Ltd
+ *
+ */
+-->
+
+<!-- Rename this file to manifest.xml before you use it to install the Add-in -->
+<!-- This version hosts the <TTG>.html in production site pqcee.github.io -->
+<!-- TTG Action: Update comments accordingly -->
+
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+  xsi:type="TaskPaneApp">
+  <Id>8665dd52-bd8a-4a93-b732-f2e0fc263d9c</Id> 
+  <Version>1.0.0.0</Version>  
+  <ProviderName>pQCee Pte Ltd</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="QuICScript"/>  
+  <Description DefaultValue="QuICScript - Quantum in a Browser"/>  
+  <IconUrl DefaultValue="https://tanteikg.github.io/QuICScript/QuIC-icon.png"/> 
+  <HighResolutionIconUrl DefaultValue="https://tanteikg.github.io/QuICS-icon.png"/>  
+  <SupportUrl DefaultValue="https://www.pqcee.com/"/> 
+  <AppDomains>
+	  <AppDomain>https://tanteikg.github.io/QuICScript</AppDomain>  
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <DefaultSettings>
+	  <SourceLocation DefaultValue="https://tanteikg.github.io/QuICScript/taskpane.html"/> 
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="CommandsGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Control xsi:type="Button" id="TaskpaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.SupertipTitle"/>
+                    <Description resid="TaskpaneButton.SupertipText"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.80x80" DefaultValue="https://tanteikg.github.io/QuICScript/QuIC-icon.png"/> 
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://www.pqcee.com/"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://tanteikg.github.io/taskpane.html"/>  
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="QuICScript"/> 
+        <bt:String id="CommandsGroup.Label" DefaultValue="pQCee Add-ins"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="QuICScript"/>  
+        <bt:String id="TaskpaneButton.SupertipTitle" DefaultValue="QuICScript"/> 
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Quantum in a Browser"/>  
+        <bt:String id="TaskpaneButton.SupertipText" DefaultValue="Quantum in a Browser"/> 
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

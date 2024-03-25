@@ -1,0 +1,81 @@
+<!--
+/*
+ *
+ * Author: pQCee
+ * Description : QuICScript implementation in Office Add-ins for Excel
+ *
+ * Copyright pQCee 2024. All rights reserved
+ *
+ * “Commons Clause” License Condition v1.0
+ *
+ * The Software is provided to you by the Licensor under the License, as defined below, subject to the following
+ * condition.
+ *
+ * Without limiting other conditions in the License, the grant of rights under the License will not include, and
+ * the License does not grant to you, the right to Sell the Software.
+ *
+ * For purposes of the foregoing, “Sell” means practicing any or all of the rights granted to you under the License
+ * to provide to third parties, for a fee or other consideration (including without limitation fees for hosting or
+ * consulting/ support services related to the Software), a product or service whose value derives, entirely or
+ * substantially, from the functionality of the Software. Any license notice or attribution required by the License
+ * must also include this Commons Clause License Condition notice.
+ *
+ * Software: QuICScript Office Add-in
+ *
+ * License: MIT, BSD 3-Clause
+ *
+ * Licensor: pQCee Pte Ltd
+ *
+ */
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- AStablish Bundle -->
+    <script type="text/javascript" src="QuICScript.js"></script>
+    <!-- Legacy Webview for TaskPane -->
+    <script type="text/javascript" src="legacywebview.js" defer></script>
+
+    <!-- Fabric Core for Office Add-in -->
+    <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css">
+    <!-- CSS for vertical line between images -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body class="ms-Fabric">
+    <!--
+      AStablish Add-in Taskpane UI. This UI is tested with the latest webview
+      using Microsoft Edge (Chromium). If a legacy webview is detected, the
+      failover UI will be displayed instead.
+    -->
+    <div id="main">
+      <img src="QuICScript-logo.png" />
+      <span class="vertical-line"></span>
+      <img src="pQCee-logo-128.png" />
+
+      <p>Setup</p>
+      <hr/>
+      <p></p>
+      <button id="btnCreateTable">Set up worksheet</button>
+      <p></p>
+
+      <p>Run</p>
+      <hr/>
+      <p></p>
+      <button id="btnRun">Run</button>
+      <p></p>
+    </div>
+
+    <!-- Graceful failover UI for legacy WebViews -->
+    <div id="legacyMessage" style="display: none; padding: 10;">
+      This add-in will not run in your version of Office. Please upgrade either
+      to perpetual Office 2021 (or later) or to a Microsoft 365 account.
+    </div>
+  </body>
+</html>
