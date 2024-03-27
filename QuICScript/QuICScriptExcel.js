@@ -64,7 +64,7 @@ async function handleRunQuICScript() {
     await context.sync();
 
     const QUICSTR = targetRange.values[0][0];
-    const NUMQUBITS = targetRange.values[1][0];
+    const NUMQUBITS = targetRange.values[0][1];
 
     let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
     selectedSheet.getRange("A1:B1").values = [[QUICSTR,NUMQUBITS]];
