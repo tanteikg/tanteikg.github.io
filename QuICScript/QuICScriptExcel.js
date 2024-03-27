@@ -76,7 +76,7 @@ async function runQuICScript(Qcir, Qnum)
 	}
 
 	resultstate= Module.ccall('QuICScript_cont','string',['number','string','number','number','number','number','number','number','number','number'],[Qnum,Qcir,1,0,0,0,0,0,1,0]);
-	message = resultstate; // + "---\n" + message;  
+	message = resultstate;//  + "---\n" + message;  
 
 } 
 
@@ -108,7 +108,7 @@ async function handleRunQuICScript() {
 
 		let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
 		selectedSheet.getRange("A1:B1").values = [[QUICSTR,NUMQUBITS]];
-		selectedSheet.getRange("A2:B2").values = [message];
+		selectedSheet.getRange("A2:A2").values = [[message]];
 
 	return context.sync();
 	});
