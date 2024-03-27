@@ -43,34 +43,75 @@ Office.onReady((info) => {
   }
 });
 
+// QuICScript functions
+//
+
+var inited = 0;
+var message = "";
+
+async function resetQuICScript()
+{
+	Module._QuICScript_end();
+	inited = 0;
+	message = "state is cleared";
+}
+
+async function runQuICScript(Qcir, Qnum) 
+{
+	if (!inited)
+	{
+		Module._QuICScript_begin(Qnum);
+		inited = Qnum;
+		message = "State is reset, working on "+Qnum+" Qubits\n";
+	}
+	else
+	{
+		if (inited != Qnum)
+		{
+			Module._QuICScript_end();
+			Module._QuICScript_begin(Qnum);
+			inited = Qnum;
+			message = "State is reset, working on "+Qnum+" Qubits\n";
+		}
+	}
+
+	resultstate= Module.ccall('QuICScript_cont','string',['number','string','number','number','number','number','number','number','number','number'],[Qnum,Qcir,1,0,0,0,0,0,1,0]);
+	message = resultstate + "---\n" + message;  
+
+} 
+
+
 // =============
 // BUTTON EVENTS
 // =============
 
 function handleCreateTable() {
-  Excel.run((context) => {
-    let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
+	Excel.run((context) => {
+		let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
 
-    selectedSheet.getRange("A1:B1").values = [["hello","world"],];
-    return context.sync();
-  });
+		selectedSheet.getRange("A1:B1").values = [["hello","world"],];
+		return context.sync();
+	});
 }
 
 async function handleRunQuICScript() {
-  await Excel.run(async (context) => {
-    let targetRange = context.workbook.getSelectedRange();
-    targetRange.load(["address","values"]);
+	await Excel.run(async (context) => {
+		let targetRange = context.workbook.getSelectedRange();
+		targetRange.load(["address","values"]);
 
-    await context.sync();
+		await context.sync();
 
-    const QUICSTR = targetRange.values[0][0];
-    const NUMQUBITS = targetRange.values[0][1];
+		const QUICSTR = targetRange.values[0][0];
+		const NUMQUBITS = targetRange.values[0][1];
 
-    let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
-    selectedSheet.getRange("A1:B1").values = [[QUICSTR,NUMQUBITS]];
+		runQuICScript(QUICSTR,NUMQUBITS);
 
-    return context.sync();
-  });
+		let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
+		selectedSheet.getRange("A1:B1").values = [[QUICSTR,NUMQUBITS]];
+		selectedSheet.getRange("A2:A2").values = [[message]];
+
+	return context.sync();
+	});
 }
 
 // ! Deprecated function. Code is kept here for reference purposes only.
