@@ -108,7 +108,7 @@ async function handleRunQuICScript() {
 
 		let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
 		selectedSheet.getRange("A1:B1").values = [[QUICSTR,NUMQUBITS]];
-		selectedSheet.getRange("A2:A2").values = [[message]];
+		selectedSheet.getRange("A2:B16").values = [[message]];
 
 	return context.sync();
 	});
