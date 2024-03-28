@@ -39,6 +39,7 @@ Office.onReady((info) => {
     // Setup actions 
     document.getElementById("btnCreateTable").onclick = handleCreateTable;
     document.getElementById("btnRunQuICScript").onclick = handleRunQuICScript;
+    document.getElementById("btnResetQuICScript").onclick = handleResetQuICScript;
 
   }
 });
@@ -99,10 +100,11 @@ function handleCreateTable() {
 	});
 }
 
-async function handleRunQuICScript() {
+async function handleResetQuICScript() {
 	await Excel.run(async (context) => {
 
 		resetQuICScript();
+		document.getElementById("message").innerText = message;
 		return context.sync();
 	}
 }
