@@ -81,7 +81,7 @@ async function runQuICScript(Qcir, Qnum, theta, phi, lamda)
 	}
 
 	resultstate= Module.ccall('QuICScript_cont','string',['number','string','number','number','number','number','number','number','number','number'],[Qnum,Qcir,theta,0,phi,0,lamda,0,1,0]);
-	message = Qcir + " is run";
+	message = "done";
 	result = resultstate;
 
 } 
@@ -125,6 +125,7 @@ async function handleRunQuICScript() {
 		let selectedSheet = context.workbook.worksheets.getActiveWorksheet();
 		let resultbox = document.getElementById("resultbox").value;
 		selectedSheet.getRange(resultbox).values = [[""]];
+		try{
 		while ((QUICSTR = targetRange.values[line][0]) != null)
 		{
 			if ((theta = targetRange.values[line][1]) == null)
@@ -138,6 +139,10 @@ async function handleRunQuICScript() {
 			document.getElementById("message").innerText = "Line"+line+": " + message;
 			selectedSheet.getRange(resultbox).values = [[result]];
 			line++;
+		}
+		} catch (e)
+		{
+			selectedSheet.getRange(resultbox).values = [[result]];
 		}
 
 
