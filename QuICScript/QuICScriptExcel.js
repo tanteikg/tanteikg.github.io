@@ -106,8 +106,9 @@ async function handleResetQuICScript() {
 		resetQuICScript();
 		document.getElementById("message").innerText = message;
 		return context.sync();
-	}
+	});
 }
+
 async function handleRunQuICScript() {
 	await Excel.run(async (context) => {
 		let targetRange = context.workbook.getSelectedRange();
